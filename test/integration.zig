@@ -571,6 +571,7 @@ test "indirect jmp" {
 
 test "ret immediate and plain" {
     try testRoundTripHelper(&.{
+        // we need to just add data_lo, data_hi understanding to the getDataOperand function
         //         "ret -7",
         //         "ret 500",
         "ret",
@@ -605,8 +606,8 @@ test "conditional jumps and loops completionist" {
 
 test "int" {
     try testRoundTripHelper(&.{
-        //         "int 13",
-        //         "int3",
+        "int 13",
+        "int3",
     });
 }
 

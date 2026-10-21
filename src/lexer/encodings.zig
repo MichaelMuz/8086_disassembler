@@ -158,7 +158,7 @@ pub const instruction_encodings = encodings: {
         parser.instSch("jcxz", "11100011, ip_inc8", .{}),
 
         parser.instSch("int", "11001101, data_8", .{}),
-        parser.instSch("int", "11001100", .{}),
+        parser.instSch("int3", "11001100", .{}),
         parser.instSch("into", "11001110", .{}),
         parser.instSch("iret", "11001111", .{}),
 
