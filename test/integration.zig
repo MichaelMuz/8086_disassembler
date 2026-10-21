@@ -480,7 +480,7 @@ test "test" {
         "test [bp + 2], si",
         "test bl, 20",
         "test byte [bx], 34",
-        //         "test ax, 23909",
+        "test ax, 23909",
     });
 }
 
@@ -490,8 +490,8 @@ test "or" {
         "or ch, cl",
         "or bp, si",
         "or di, sp",
-        //         "or al, 93",
-        //         "or ax, 20392",
+        "or al, 93",
+        "or ax, 20392",
         "or [bp + si + 10], ch",
         "or [bx + di + 1000], dx",
         "or bx, [bp]",
@@ -507,8 +507,8 @@ test "xor" {
         "xor ch, cl",
         "xor bp, si",
         "xor di, sp",
-        //         "xor al, 93",
-        //         "xor ax, 20392",
+        "xor al, 93",
+        "xor ax, 20392",
         "xor [bp + si + 10], ch",
         "xor [bx + di + 1000], dx",
         "xor bx, [bp]",
