@@ -49,7 +49,7 @@ pub const instruction_encodings = encodings: {
         parser.instSch("add", "0000010 w, data, data_if_w_eq_1", .{ .d = 0, .reg = 0 }),
 
         parser.instSch("adc", "000100 d w, mod reg rm, disp_lo, disp_hi", .{}),
-        parser.instSch("adc", "100000 s w, mod 010 rm, disp_lo, disp_hi, data, data_if_sw_eq_01", .{}),
+        parser.instSch("adc", "100000 s w, mod 010 rm, disp_lo, disp_hi, data, data_if_sw_eq_01", .{ .d = 0 }),
         parser.instSch("adc", "0001010 w, data, data_if_w_eq_1", .{ .reg = 0 }),
 
         parser.instSch("inc", "1111111 w, mod 000 rm, disp_lo, disp_hi", .{}),
@@ -95,20 +95,20 @@ pub const instruction_encodings = encodings: {
         parser.instSch("rcr", "110100 v w, mod 011 rm, disp_lo, disp_hi", .{}),
 
         parser.instSch("and", "001000 d w, mod reg rm, disp_lo, disp_hi", .{}),
-        parser.instSch("and", "1000000 w, mod 100 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{}),
+        parser.instSch("and", "1000000 w, mod 100 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{ .d = 0 }),
         parser.instSch("and", "0010010 w, data, data_if_w_eq_1", .{ .d = 0, .reg = 0 }),
 
         parser.instSch("test", "1000010 w, mod reg rm, disp_lo, disp_hi", .{}),
-        parser.instSch("test", "1111011 w, mod 000 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{}),
-        parser.instSch("test", "1010100 w, data, data_if_w_eq_1", .{}),
+        parser.instSch("test", "1111011 w, mod 000 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{ .d = 0 }),
+        parser.instSch("test", "1010100 w, data, data_if_w_eq_1", .{ .d = 0, .reg = 0 }),
 
         parser.instSch("or", "000010 d w, mod reg rm, disp_lo, disp_hi", .{}),
-        parser.instSch("or", "1000000 w, mod 001 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{}),
-        parser.instSch("or", "0000110 w, data, data_if_w_eq_1", .{}),
+        parser.instSch("or", "1000000 w, mod 001 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{ .d = 0 }),
+        parser.instSch("or", "0000110 w, data, data_if_w_eq_1", .{ .d = 0, .reg = 0 }),
 
         parser.instSch("xor", "001100 d w, mod reg rm, disp_lo, disp_hi", .{}),
-        parser.instSch("xor", "1000000 w, mod 110 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{}),
-        parser.instSch("xor", "0011010 w, data, data_if_w_eq_1", .{}),
+        parser.instSch("xor", "1000000 w, mod 110 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{ .d = 0 }),
+        parser.instSch("xor", "0011010 w, data, data_if_w_eq_1", .{ .d = 0, .reg = 0 }),
 
         // String manipulation
         parser.instSch("rep", "1111001 z", .{}),
