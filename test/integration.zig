@@ -685,7 +685,7 @@ test "retf and ret" {
     try testRoundTripHelper(&.{
         //         "retf 17556",
         //         "ret 17560",
-        //         "retf",
+        "retf",
         "ret",
     });
 }

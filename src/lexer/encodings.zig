@@ -132,8 +132,8 @@ pub const instruction_encodings = encodings: {
 
         parser.instSch("ret", "11000011", .{}),
         parser.instSch("ret", "11000010, data_lo, data_hi", .{}),
-        parser.instSch("ret", "11001011", .{}),
-        parser.instSch("ret", "11001010, data_lo, data_hi", .{}),
+        parser.instSch("retf", "11001011", .{}),
+        parser.instSch("retf", "11001010, data_lo, data_hi", .{}),
 
         parser.instSch("je", "01110100, ip_inc8", .{}),
         parser.instSch("jl", "01111100, ip_inc8", .{}),
