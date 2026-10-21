@@ -120,13 +120,13 @@ pub const instruction_encodings = encodings: {
 
         // Control transfer
         parser.instSch("call", "11101000, ip_inc_lo, ip_inc_hi", .{}),
-        parser.instSch("call", "11111111, mod 010 rm, disp_lo, disp_hi", .{}),
+        parser.instSch("call", "11111111, mod 010 rm, disp_lo, disp_hi", .{ .w = 1 }),
         parser.instSch("call", "10011010, ip_lo, ip_hi, cs_lo, cs_hi", .{}),
         parser.instSch("call", "11111111, mod 011 rm, disp_lo, disp_hi", .{}),
 
         parser.instSch("jmp", "11101001, ip_inc_lo, ip_inc_hi", .{}),
         parser.instSch("jmp", "11101011, ip_inc8", .{}),
-        parser.instSch("jmp", "11111111, mod 100 rm, disp_lo, disp_hi", .{}),
+        parser.instSch("jmp", "11111111, mod 100 rm, disp_lo, disp_hi", .{ .w = 1 }),
         parser.instSch("jmp", "11101010, ip_lo, ip_hi, cs_lo, cs_hi", .{}),
         parser.instSch("jmp", "11111111, mod 101 rm, disp_lo, disp_hi", .{}),
 

@@ -542,19 +542,30 @@ test "rep stos" {
 
 test "indirect call" {
     try testRoundTripHelper(&.{
-        //         "call [39201]",
-        //         "call [bp - 100]",
-        //         "call sp",
-        //         "call ax",
+        // this technically passes but is not good.
+        // nasm -f bin -o /dev/stdout =(printf 'bits 16\ncall [39201]') | ./zig-out/bin/_8086_dissasembler - -
+        // call byte [ - 26335]
+        // nasm accepts this but the instruction is never ambiguous so we don't need byte here
+        // Unary instructions that don't have a w bit are not ambiguous and don't need this treatment. Rule
+        // we don't need to worry about this for binary instructions because they always are ambiguous in
+        // immediate to memory cases
+        // the negative is correct bitwise but awkard if we are using a direct address. Rule
+        // we should encode these two rules
+        "call [39201]",
+        "call [bp - 100]",
+        "call sp",
+        "call ax",
     });
 }
 
 test "indirect jmp" {
     try testRoundTripHelper(&.{
-        //         "jmp ax",
-        //         "jmp di",
-        //         "jmp [12]",
-        //         "jmp [4395]",
+        // these memory jumps human readable encodings should be checked bc likely have the same
+        // negative offset and byte/word overspecification issues
+        "jmp ax",
+        "jmp di",
+        "jmp [12]",
+        "jmp [4395]",
     });
 }
 
