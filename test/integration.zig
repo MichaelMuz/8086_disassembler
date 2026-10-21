@@ -534,6 +534,7 @@ test "rep string operations" {
 
 test "rep stos" {
     try testRoundTripHelper(&.{
+        // rep is a prefix so we need a code change to tag instructions that don't get a newline after them
         //         "rep stosb",
         //         "rep stosw",
     });
