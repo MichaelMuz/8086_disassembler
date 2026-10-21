@@ -96,7 +96,7 @@ pub const instruction_encodings = encodings: {
 
         parser.instSch("and", "001000 d w, mod reg rm, disp_lo, disp_hi", .{}),
         parser.instSch("and", "1000000 w, mod 100 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{}),
-        parser.instSch("and", "0010010 w, data, data_if_w_eq_1", .{}),
+        parser.instSch("and", "0010010 w, data, data_if_w_eq_1", .{ .d = 0, .reg = 0 }),
 
         parser.instSch("test", "1000010 w, mod reg rm, disp_lo, disp_hi", .{}),
         parser.instSch("test", "1111011 w, mod 000 rm, disp_lo, disp_hi, data, data_if_w_eq_1", .{}),
