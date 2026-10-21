@@ -520,6 +520,7 @@ test "xor" {
 
 test "rep string operations" {
     try testRoundTripHelper(&.{
+        // rep is a prefix so we need a code change to tag instructions that don't get a newline after them
         //         "rep movsb",
         //         "rep cmpsb",
         //         "rep scasb",
