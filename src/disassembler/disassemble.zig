@@ -109,6 +109,19 @@ fn getAddrOperand(addr_hi: ?u8, addr_lo: ?u8, word: bool) ?operands.Operand {
     }
 }
 
+fn getRotateOperand(v: ?bool) ?operands.Operand {
+    const cl_index = 1; // Should prob comptime this to make sure it is right?
+    if (v) |is_cl| {
+        if (is_cl) {
+            return operands.Operand{ .register_operand = .{ .reg_operand = .{ .reg_ind = cl_index, .word = false } } };
+        } else {
+            return operands.Operand{ .immediate_operand = .{ .value = 1, .word = false } };
+        }
+    } else {
+        return null;
+    }
+}
+
 pub fn disassemble(schema: *const lexer.schema.InstructionSchema, extracted: *const decoder.ParsedInstruction) instructions.DisasmInstr {
     if (extracted.get(.ip_inc8)) |inc_8| {
         const signed: i8 = @bitCast(inc_8);
@@ -139,9 +152,15 @@ pub fn disassemble(schema: *const lexer.schema.InstructionSchema, extracted: *co
     const rm_operand = getRmOperand(rm, mode, word, disp);
     const addr_operand = getAddrOperand(extracted.get(.addr_hi), extracted.get(.addr_lo), word);
 
+    const v: ?bool = if (extracted.get(.v)) |v|
+        if (v == 1) true else false
+    else
+        null;
+    const rotate_operand = getRotateOperand(v);
+
     var operand_buffer = [_]operands.Operand{undefined} ** 3;
     var op_arr = std.ArrayList(operands.Operand).initBuffer(&operand_buffer);
-    for ([_]?operands.Operand{ data_operand, reg_operand, rm_operand, addr_operand }) |op| {
+    for ([_]?operands.Operand{ rotate_operand, data_operand, reg_operand, rm_operand, addr_operand }) |op| {
         if (op) |o| {
             op_arr.appendAssumeCapacity(o);
         }

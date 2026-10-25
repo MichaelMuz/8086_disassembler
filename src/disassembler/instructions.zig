@@ -38,13 +38,13 @@ const BinaryInstruction = struct {
         // "{self.mnemonic} {self.dest}, {size_spec}{self.source}"
 
         arr.printAssumeCapacity("{s} ", .{self.mnemonic});
-        self.dst.fmt(arr);
-        arr.printAssumeCapacity(", ", .{});
-        if (self.src == .immediate_operand) {
-            if (self.dst == .memory_operand) {
+        if (self.dst == .memory_operand) {
+            if (self.src == .immediate_operand or (self.src == .register_operand and self.src.word() != self.dst.word())) {
                 arr.printAssumeCapacity("{s} ", .{self.dst.memory_operand.getSizeSpec()});
             }
         }
+        self.dst.fmt(arr);
+        arr.printAssumeCapacity(", ", .{});
         self.src.fmt(arr);
     }
 };

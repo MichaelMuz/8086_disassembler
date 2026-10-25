@@ -133,6 +133,14 @@ pub const Operand = union(enum) {
             inline else => |op| op.fmt(arr),
         };
     }
+    pub fn word(self: *const @This()) bool {
+        return switch (self.*) {
+            .immediate_operand => |op| op.word,
+            .register_operand => |op| op.word(),
+            .memory_operand => |op| op.word,
+            .addr_operand => |op| op.word,
+        };
+    }
 };
 
 fn test_fmt_helper(expected: []const u8, actual: anytype) !void {
