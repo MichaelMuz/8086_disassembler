@@ -47,7 +47,7 @@ fn getDisp(disp_hi: ?u8, disp_lo: ?u8) i16 {
     }
 }
 
-fn getDataOperand(data_8: ?u8, data: ?u8, data_if_w_eq_1: ?u8, word: bool, data_if_sw_eq_01: ?u8, sign_extend: bool) ?operands.Operand {
+fn getDataOperand(data_8: ?u8, data: ?u8, data_lo: ?u8, data_hi: ?u8, data_if_w_eq_1: ?u8, word: bool, data_if_sw_eq_01: ?u8, sign_extend: bool) ?operands.Operand {
     if (data_8) |byte| {
         if (data != null) unreachable;
         return operands.Operand{ .immediate_operand = .{ .value = byte, .word = word } };
@@ -61,6 +61,8 @@ fn getDataOperand(data_8: ?u8, data: ?u8, data_if_w_eq_1: ?u8, word: bool, data_
             high_byte = ds;
         }
         return operands.Operand{ .immediate_operand = .{ .value = std.mem.readInt(u16, &[_]u8{ high_byte orelse 0, low_byte }, .big), .word = word } };
+    } else if (data_lo) |lo| {
+        return operands.Operand{ .immediate_operand = .{ .value = std.mem.readInt(u16, &[_]u8{ data_hi orelse 0, lo }, .big), .word = data_hi != null } };
     } else {
         return null;
     }
@@ -134,6 +136,8 @@ pub fn disassemble(schema: *const lexer.schema.InstructionSchema, extracted: *co
     const data_operand = getDataOperand(
         extracted.get(.data_8),
         extracted.get(.data),
+        extracted.get(.data_lo),
+        extracted.get(.data_hi),
         extracted.get(.data_if_w_eq_1),
         word,
         extracted.get(.data_if_sw_eq_01),
