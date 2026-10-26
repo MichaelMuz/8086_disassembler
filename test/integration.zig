@@ -18,7 +18,8 @@ fn getBinFromNasm(asm_instructions: []const u8, buffer: []u8) ![]const u8 {
 
     try tmp_dir.writeFile(std.testing.io, .{ .sub_path = nasm_in_file, .data = asm_instructions });
 
-    _ = try std.process.run(std.testing.allocator, std.testing.io, .{ .argv = &.{ "nasm", nasm_in_file, "-o", nasm_out_file } });
+    // -w-prefix-lock-xchg to ignore warnings for test cases including a lock on an xchg instruction bc our test has that and it likely makes sense to lock that on the 8086
+    _ = try std.process.run(std.testing.allocator, std.testing.io, .{ .argv = &.{ "nasm", "-w-prefix-lock-xchg", nasm_in_file, "-o", nasm_out_file } });
 
     const nasm_out = try tmp_dir.readFile(std.testing.io, nasm_out_file, buffer);
     return nasm_out;
@@ -636,7 +637,7 @@ test "flag control halt wait" {
 test "lock" {
     try testRoundTripHelper(&.{
         "lock not byte [bp + 9905]",
-        // "lock xchg [100], al",
+        "lock xchg [100], al",
     });
 }
 
