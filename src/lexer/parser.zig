@@ -96,35 +96,35 @@ pub fn instSch(name: []const u8, pattern: []const u8, implied_values: ImplicitIn
 }
 
 test "check that things match" {
-    const mov0 = instSch("mov0", "100010 d w", .{});
+    const mov0 = instSch("mov0", "100010 d w", .{}, .{});
     try std.testing.expect(mov0.matches(0b10001011 << 8));
     try std.testing.expect(mov0.matches(0b10001000 << 8));
     try std.testing.expect(!mov0.matches(0b10011011 << 8));
 }
 test "is one bit identified if I fill just first byte" {
-    const mov = instSch("mov0", "100010 d w", .{});
+    const mov = instSch("mov0", "100010 d w", .{}, .{});
     try std.testing.expect(mov.isOneByteIdentified());
 }
 test "is one bit identified if I fill just first byte and second is just vars" {
-    const mov = instSch("mov0", "100010 d w, reg mod rm", .{});
+    const mov = instSch("mov0", "100010 d w, reg mod rm", .{}, .{});
     try std.testing.expect(mov.isOneByteIdentified());
 }
 test "is not one bit identified if I fill just one bit in second byte" {
-    const mov = instSch("mov0", "100010 d w, reg rm 0 d", .{});
+    const mov = instSch("mov0", "100010 d w, reg rm 0 d", .{}, .{});
     try std.testing.expect(!mov.isOneByteIdentified());
 }
 test "check that the literal field has the right value" {
-    const mov = instSch("mov0", "100010 d w, reg rm 0 d", .{});
+    const mov = instSch("mov0", "100010 d w, reg rm 0 d", .{}, .{});
     try std.testing.expect(mov.fields()[0].literal_field.value == 0b100010);
 }
 test "check that implied values are populated" {
-    const mov = instSch("mov0", "100010 d w", .{ .data = 1, .z = 5 });
+    const mov = instSch("mov0", "100010 d w", .{ .data = 1, .z = 5 }, .{});
     try std.testing.expect(mov.fields()[0].literal_field.value == 0b100010);
     try std.testing.expect(mov.implied_values.get(.data) == 1);
     try std.testing.expect(mov.implied_values.get(.z) == 5);
 }
 test "check that skeleton correct with multiple differentiating bytes" {
-    const mov = instSch("mov0", "100010 d 0, 111 mod 001", .{});
+    const mov = instSch("mov0", "100010 d 0, 111 mod 001", .{}, .{});
     try std.testing.expect(mov.fields()[0].literal_field.value == 0b100010);
     try std.testing.expect(mov.fields()[1].named_field == .d);
     try std.testing.expect(mov.fields()[2].literal_field.value == 0b0);
@@ -135,7 +135,7 @@ test "check that skeleton correct with multiple differentiating bytes" {
     try std.testing.expect(mov.skeleton == std.mem.readInt(u16, &[_]u8{ 0b10001000, 0b11100001 }, .big));
 }
 test "check matches" {
-    const mov = instSch("mov0", "10001110, mod 0 sr rm, disp_lo, disp_hi", .{});
+    const mov = instSch("mov0", "10001110, mod 0 sr rm, disp_lo, disp_hi", .{}, .{});
     try std.testing.expect(mov.fields()[0].literal_field.value == 0b10001110);
     try std.testing.expect(mov.fields()[1].named_field == .mod);
     try std.testing.expect(mov.fields()[2].literal_field.value == 0b0);

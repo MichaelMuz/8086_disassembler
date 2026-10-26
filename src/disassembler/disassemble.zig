@@ -270,7 +270,7 @@ test "memory mode direct index" {
 }
 test "byte displacement mode" {
     try test_disassemble_helper(
-        "mov [bx + si + 5], byte 50",
+        "mov byte [bx + si + 5], 50",
         TestSchemas.mov_immediate_rm,
         .{
             .w = 0,
@@ -283,7 +283,7 @@ test "byte displacement mode" {
 }
 test "word displacement mode" {
     try test_disassemble_helper(
-        "mov [bx + si + 512], word 50",
+        "mov word [bx + si + 512], 50",
         TestSchemas.mov_immediate_rm,
         .{
             .w = 1,

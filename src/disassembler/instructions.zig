@@ -112,7 +112,7 @@ fn test_fmt_helper(expected: []const u8, actual: anytype) !void {
 }
 
 test "nullary instruction" {
-    try test_fmt_helper("nul", &NullaryInstruction{ .mnemonic = "nul" });
+    try test_fmt_helper("nul", &NullaryInstruction{ .mnemonic = "nul", .raw_word = null, .is_prefix = false });
 }
 
 test "unary instruction register operand" {
@@ -148,7 +148,7 @@ test "binary instruction immediate to reg" {
     });
 }
 test "binary instruction immediate to mem byte" {
-    try test_fmt_helper("binar [bx + si + 200], byte 5", &BinaryInstruction{
+    try test_fmt_helper("binar byte [bx + si + 200], 5", &BinaryInstruction{
         .mnemonic = "binar",
         .src = operands.Operand{
             .immediate_operand = .{ .value = 5, .word = false },
@@ -159,7 +159,7 @@ test "binary instruction immediate to mem byte" {
     });
 }
 test "binary instruction immediate to mem word" {
-    try test_fmt_helper("binar [bx + si + 200], word 5", &BinaryInstruction{
+    try test_fmt_helper("binar word [bx + si + 200], 5", &BinaryInstruction{
         .mnemonic = "binar",
         .src = operands.Operand{
             .immediate_operand = .{ .value = 5, .word = true },
@@ -180,7 +180,7 @@ test "jump instruction with label" {
 }
 
 test "disasm nullary" {
-    try test_fmt_helper("nul", &DisasmInstr{ .nullary_instruction = .{ .mnemonic = "nul" } });
+    try test_fmt_helper("nul", &DisasmInstr{ .nullary_instruction = .{ .mnemonic = "nul", .raw_word = null, .is_prefix = false } });
 }
 test "disasm unary" {
     try test_fmt_helper("unar cx", &DisasmInstr{ .unary_instruction = .{ .mnemonic = "unar", .op = operands.Operand{ .register_operand = .{ .reg_operand = .{ .reg_ind = 1, .word = true } } } } });
