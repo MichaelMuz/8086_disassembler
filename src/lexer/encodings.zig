@@ -173,7 +173,7 @@ pub const instruction_encodings = encodings: {
         parser.instSch("hlt", "11110100", .{}, .{}),
         parser.instSch("wait", "10011011", .{}, .{}),
         parser.instSch("esc", "11011 esc_opcode_hi, mod esc_opcode_lo rm, disp_lo, disp_hi", .{}, .{}),
-        parser.instSch("lock", "11110000", .{}, .{}),
+        parser.instSch("lock", "11110000", .{}, .{ .is_prefix = true }),
         parser.instSch("segment", "001 sr 110", .{}, .{}),
     };
 };

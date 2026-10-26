@@ -635,8 +635,8 @@ test "flag control halt wait" {
 
 test "lock" {
     try testRoundTripHelper(&.{
-        //         "lock not byte [bp + 9905]",
-        //         "lock xchg [100], al",
+        "lock not byte [bp + 9905]",
+        // "lock xchg [100], al",
     });
 }
 
