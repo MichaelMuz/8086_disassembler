@@ -62,7 +62,7 @@ fn parseByte(byte: []const u8, field_list: *std.ArrayList(schema.SchemaField)) s
 const NotImplied = @as(?u8, null);
 const ImplicitInitKwargs = std.enums.EnumFieldStruct(schema.NamedField, ?u8, NotImplied);
 
-pub fn instSch(name: []const u8, pattern: []const u8, implied_values: ImplicitInitKwargs) schema.InstructionSchema {
+pub fn instSch(name: []const u8, pattern: []const u8, implied_values: ImplicitInitKwargs, flags: schema.Flags) schema.InstructionSchema {
     var buffer: [schema.MaxFieldsPerInstruction]schema.SchemaField = undefined;
     var field_list = std.ArrayList(schema.SchemaField).initBuffer(&buffer);
 
@@ -89,6 +89,7 @@ pub fn instSch(name: []const u8, pattern: []const u8, implied_values: ImplicitIn
             .len = field_list.items.len,
         },
         .implied_values = schema.ImpliedValues.initDefault(NotImplied, implied_values),
+        .flags = flags,
         .skeleton = std.mem.readInt(u16, &skeleton_halfs, .big),
         .mask = std.mem.readInt(u16, &mask_halfs, .big),
     };

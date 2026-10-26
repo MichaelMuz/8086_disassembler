@@ -20,7 +20,8 @@ pub fn disassembleStream(reader: *std.Io.Reader, writer: *std.Io.Writer) !void {
         const disasm: disassembler.instructions.DisasmInstr = disassembler.disassemble.disassemble(decoded.schema, &decoded.parsed);
         disasm.fmt(&arr);
         try writer.writeAll(arr.items);
-        _ = try writer.write("\n");
+        const end_char = if (disasm.is_prefix()) " " else "\n";
+        _ = try writer.write(end_char);
     }
 }
 

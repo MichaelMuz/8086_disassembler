@@ -130,7 +130,11 @@ pub fn disassemble(schema: *const lexer.schema.InstructionSchema, extracted: *co
         return instructions.DisasmInstr{ .jump_instruction = .{ .mnemonic = schema.name, .disp = signed, .label = null } };
     }
 
-    const word: bool = if (extracted.get(.w)) |w| w == 1 else false; // no idea what to do with instructions that don't have a w. Prob unary but idk yet
+    const raw_word: ?bool = if (extracted.get(.w)) |w|
+        if (w == 1) true else false
+    else
+        null;
+    const word: bool = raw_word orelse false; // no idea what to do with instructions that don't have a w. Prob unary but idk yet
     const sign_extend: bool = if (extracted.get(.s)) |s| s == 1 else false;
 
     const data_operand = getDataOperand(
@@ -173,7 +177,9 @@ pub fn disassemble(schema: *const lexer.schema.InstructionSchema, extracted: *co
     const d: u1 = @intCast(extracted.get(.d) orelse 0);
 
     return switch (op_arr.items.len) {
-        0 => instructions.DisasmInstr{ .nullary_instruction = .{ .mnemonic = schema.name } },
+        0 => instructions.DisasmInstr{
+            .nullary_instruction = .{ .mnemonic = schema.name, .raw_word = raw_word, .is_prefix = schema.flags.is_prefix },
+        },
         1 => instructions.DisasmInstr{ .unary_instruction = .{ .mnemonic = schema.name, .op = op_arr.items[0] } },
         2 => instructions.DisasmInstr{ .binary_instruction = .{
             .mnemonic = schema.name,

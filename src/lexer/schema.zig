@@ -91,6 +91,10 @@ pub const MaxFieldsPerInstruction = 8 * 6; // At most 8 one bit things, at most 
 
 pub const ImpliedValues = std.EnumArray(NamedField, ?u8);
 
+pub const Flags = struct {
+    is_prefix: bool = false,
+};
+
 pub const InstructionSchema = struct {
     name: []const u8,
     fixed_list: struct {
@@ -99,6 +103,7 @@ pub const InstructionSchema = struct {
     },
     /// things hardcoded by the instruction itself
     implied_values: std.EnumArray(NamedField, ?u8),
+    flags: Flags,
     /// the literal bits preserved and 0s for the variable bits
     skeleton: u16,
     /// the literal bits have 1s and the variable bits get 0s

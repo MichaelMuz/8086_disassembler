@@ -517,23 +517,28 @@ test "xor" {
 
 test "rep string operations" {
     try testRoundTripHelper(&.{
-        // rep is a prefix so we need a code change to tag instructions that don't get a newline after them
-        //         "rep movsb",
-        //         "rep cmpsb",
-        //         "rep scasb",
-        //         "rep lodsb",
-        //         "rep movsw",
-        //         "rep cmpsw",
-        //         "rep scasw",
-        //         "rep lodsw",
+        // rep is weird bc its representation depends on the instruction coming after it:
+        // 1. movs / lods /stos - z is ignored by the cpu and people generally type it as rep bc it always repeats.
+        // 2/3. cmps / scas - z is 1 and we repeat if z flag is on, "repe" in that case. "repne" otherwise
+        // that is just what people type for meaning. Nasm accepts rep everywhere. This is cuteness, not correctness.
+        // always outputting rep is correct just not stylish since the thing after treats if we
+        // ignore z, check for equality, or inequality
+        "rep movsb",
+        "rep cmpsb",
+        "rep scasb",
+        "rep lodsb",
+        "rep movsw",
+        "rep cmpsw",
+        "rep scasw",
+        "rep lodsw",
     });
 }
 
 test "rep stos" {
     try testRoundTripHelper(&.{
-        // rep is a prefix so we need a code change to tag instructions that don't get a newline after them
-        //         "rep stosb",
-        //         "rep stosw",
+        // Same rep weirdness as described above to optimize output's appearance
+        "rep stosb",
+        "rep stosw",
     });
 }
 

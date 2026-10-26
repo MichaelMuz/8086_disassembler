@@ -6,9 +6,15 @@ const operands = @import("operands.zig");
 const NullaryInstruction = struct {
     mnemonic: []const u8,
     // inst_size: u8, this is for when jumps need to calculate their offsets
+    raw_word: ?bool,
+    is_prefix: bool,
 
     pub fn fmt(self: *const @This(), arr: *std.ArrayList(u8)) void {
         arr.printAssumeCapacity("{s}", .{self.mnemonic});
+        if (self.raw_word) |word| {
+            const postfix = if (word) "w" else "b";
+            arr.printAssumeCapacity("{s}", .{postfix});
+        }
     }
 };
 
@@ -87,6 +93,13 @@ pub const DisasmInstr = union(enum) {
     pub fn fmt(self: *const @This(), arr: *std.ArrayList(u8)) void {
         return switch (self.*) {
             inline else => |inst| inst.fmt(arr),
+        };
+    }
+
+    pub fn is_prefix(self: *const @This()) bool {
+        return switch (self.*) {
+            .nullary_instruction => |nullary| nullary.is_prefix,
+            inline else => false,
         };
     }
 };
